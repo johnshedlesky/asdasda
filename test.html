@@ -1,12 +1,296 @@
-<div id="mainContent">
-  <div id="guideCard">
-    <h1>Test</h1>
-    <ul>
-      <li>Never share your passwords.</li>
-      <li>Enable two-factor authentication.</li>
-      <li>Watch for phishing links.</li>
-      <li>Keep your system updated.</li>
-      <li>Use strong unique passwords.</li>
-    </ul>
+<!--
+  real-estate-landing.html
+  Single-file, responsive real estate landing page with clean animations and image areas.
+
+  To serve quickly with Node.js (optional):
+    1) Install http-server: npm i -g http-server
+    2) Run: http-server -c-1
+    3) Open http://localhost:8080/real-estate-landing.html
+
+  Or use this minimal Express server (save as server.js):
+
+  const express = require('express');
+  const app = express();
+  app.use(express.static(__dirname));
+  app.listen(3000, () => console.log('Listening on http://localhost:3000'));
+
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon Properties — Modern Real Estate</title>
+  <meta name="description" content="Horizon Properties — modern, clean real estate landing page template with animations and image areas." />
+  <style>
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #9aa4b2;
+      --accent: linear-gradient(90deg,#6ee7b7,#60a5fa 60%);
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --radius: 14px;
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue';
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent 10%),
+                  radial-gradient(800px 400px at 90% 80%, rgba(110,231,183,0.03), transparent 10%),
+                  var(--bg);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:1200px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:20px;
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      backdrop-filter: blur(8px) saturate(120%);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px
+    }
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:var(--glass);
+      display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:var(--muted);
+      box-shadow: inset 0 -6px 12px rgba(255,255,255,0.02);
+    }
+    .brand h1{margin:0;font-size:18px;letter-spacing:0.3px}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+
+    nav{display:flex;gap:12px;align-items:center}
+    .nav-btn{padding:10px 14px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.02);font-size:14px;color:var(--muted);cursor:pointer}
+    .nav-btn.primary{background:linear-gradient(90deg,#60a5fa,#6ee7b7);color:#071124;border:1px solid rgba(0,0,0,0.2);font-weight:600}
+
+    .hero{
+      display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:center
+    }
+
+    .hero-left{padding:16px}
+    .eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--glass-2);color:var(--muted);font-size:13px;margin-bottom:12px}
+    h2{margin:0 0 12px 0;font-size:36px;line-height:1.03}
+    p.lead{color:var(--muted);margin:0 0 18px}
+
+    .search{
+      display:flex;gap:8px;background:var(--card);padding:10px;border-radius:12px;align-items:center;border:1px solid rgba(255,255,255,0.02)
+    }
+    .search input{flex:1;background:transparent;border:0;padding:10px 8px;color:inherit;font-size:15px}
+    .search button{padding:10px 14px;border-radius:10px;border:0;background:transparent;font-weight:600;cursor:pointer}
+
+    .stats{display:flex;gap:12px;margin-top:18px}
+    .stat{background:var(--glass);padding:12px;border-radius:12px;min-width:130px;text-align:center}
+    .stat .num{font-size:18px;font-weight:700}
+    .stat .lbl{color:var(--muted);font-size:13px}
+
+    /* Right column - cards with images */
+    .gallery{display:grid;grid-template-rows:1fr 1fr;gap:12px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:180px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.02)
+    }
+    .img-placeholder{
+      flex:1;border-radius:10px;background:linear-gradient(120deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);border:1px dashed rgba(255,255,255,0.03)
+    }
+    .card h3{margin:0;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:13px}
+
+    /* property list */
+    .properties{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+    .prop{background:var(--card);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.02);display:flex;flex-direction:column;gap:10px}
+    .prop .thumb{height:140px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:block}
+    .prop h4{margin:0}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+
+    footer{margin-top:20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+
+    /* subtle animated accent */
+    .floating-accent{position:absolute;right:-120px;top:-80px;width:360px;height:360px;border-radius:50%;filter:blur(40px);opacity:0.35;background:linear-gradient(90deg,#6ee7b7,#60a5fa)}
+
+    /* animation utilities */
+    @keyframes floaty {0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+    .float{animation:floaty 6s ease-in-out infinite}
+
+    /* entrance */
+    .fade-in{opacity:0;transform:translateY(6px);animation:enter 900ms forwards}
+    @keyframes enter{to{opacity:1;transform:none}}
+
+    /* responsive */
+    @media (max-width:1000px){
+      .hero{grid-template-columns:1fr}
+      .properties{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:640px){
+      body{padding:18px}
+      .properties{grid-template-columns:1fr}
+      .container{padding:18px}
+      h2{font-size:26px}
+    }
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .btn{padding:10px 14px;border-radius:10px;border:0;background:var(--accent);cursor:pointer;color:#041024;font-weight:700}
+
+  </style>
+</head>
+<body>
+  <div class="container fade-in">
+    <div class="floating-accent float" aria-hidden></div>
+
+    <header>
+      <div class="brand">
+        <div class="logo">HP</div>
+        <div>
+          <h1>Horizon Properties</h1>
+          <p>Modern homes. Thoughtful design.</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="nav-btn">Listings</button>
+        <button class="nav-btn">Agents</button>
+        <button class="nav-btn">Contact</button>
+        <button class="nav-btn primary">Get an appraisal</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-left">
+          <span class="eyebrow">Featured</span>
+          <h2>Find your next home with confidence — curated listings, virtual tours, and local expertise.</h2>
+          <p class="lead">Browse modern apartments, family homes, and investment properties. Replace these placeholders with your real photos and descriptions.</p>
+
+          <div class="search">
+            <input placeholder="Search by city, neighbourhood, or MLS #" aria-label="property search" />
+            <button class="btn">Search</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="num">1,128</div>
+              <div class="lbl">Listings</div>
+            </div>
+            <div class="stat">
+              <div class="num">86%</div>
+              <div class="lbl">Avg Sell Rate</div>
+            </div>
+            <div class="stat">
+              <div class="num">$420k</div>
+              <div class="lbl">Median Price</div>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="gallery">
+          <div class="card">
+            <h3>Showcase Property</h3>
+            <div class="img-placeholder">Add hero property image here — replace with &lt;img src="..."&gt;</div>
+            <p class="muted">Large, high-visibility image area for your top listing. Add overlay tags for price, beds, baths.</p>
+          </div>
+
+          <div class="card">
+            <h3>Virtual Tour</h3>
+            <div class="img-placeholder">Embed a 3D tour iframe or video here</div>
+            <p class="muted">Visitors can explore the property with an embedded tour.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="properties">
+        <article class="prop">
+          <div class="thumb img-placeholder">Image 1 — replace with &lt;img src="..." alt="" /&gt;</div>
+          <h4>Modern Family Home</h4>
+          <div class="meta"><span>3 bd • 2 ba</span><span>$520,000</span></div>
+        </article>
+
+        <article class="prop">
+          <div class="thumb img-placeholder">Image 2</div>
+          <h4>Downtown Loft</h4>
+          <div class="meta"><span>2 bd • 1 ba</span><span>$410,000</span></div>
+        </article>
+
+        <article class="prop">
+          <div class="thumb img-placeholder">Image 3</div>
+          <h4>Cozy Suburban Bungalow</h4>
+          <div class="meta"><span>4 bd • 3 ba</span><span>$640,000</span></div>
+        </article>
+
+        <article class="prop">
+          <div class="thumb img-placeholder">Image 4</div>
+          <h4>Seaside Retreat</h4>
+          <div class="meta"><span>3 bd • 2 ba</span><span>$880,000</span></div>
+        </article>
+
+        <article class="prop">
+          <div class="thumb img-placeholder">Image 5</div>
+          <h4>Investment Duplex</h4>
+          <div class="meta"><span>6 bd • 4 ba</span><span>$1,050,000</span></div>
+        </article>
+
+        <article class="prop">
+          <div class="thumb img-placeholder">Image 6</div>
+          <h4>Urban Penthouse</h4>
+          <div class="meta"><span>2 bd • 2 ba</span><span>$1,220,000</span></div>
+        </article>
+      </section>
+
+      <footer>
+        <div>© <strong>Horizon Properties</strong> — Built with care</div>
+        <div class="muted">Replace logo, images and copy to make this your brand.</div>
+      </footer>
+    </main>
   </div>
-</div>
+
+  <script>
+    // Small interactive touches
+    document.querySelectorAll('.img-placeholder').forEach(el=>{
+      el.addEventListener('click',()=>{
+        const example = prompt('Paste image URL to replace placeholder (leave empty to cancel):')
+        if(example){
+          const img = document.createElement('img')
+          img.src = example
+          img.alt = 'Property image'
+          img.style.width = '100%'
+          img.style.height = '100%'
+          img.style.objectFit = 'cover'
+          img.style.borderRadius = '8px'
+          el.innerHTML = ''
+          el.appendChild(img)
+        }
+      })
+    })
+
+    // Simple reveal on scroll
+    const io = new IntersectionObserver(entries=>{
+      for(const e of entries){
+        if(e.isIntersecting) e.target.classList.add('fade-in')
+      }
+    },{threshold:0.15})
+    document.querySelectorAll('.prop, .card, header').forEach(n=>io.observe(n))
+  </script>
+</body>
+</html>
